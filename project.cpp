@@ -1,5 +1,7 @@
 #include <iostream>
 #include <conio.h>
+#include <random>
+#include "time.h"
 using namespace std;
 bool gameOver;
 const int width = 20;
@@ -9,10 +11,11 @@ enum eDirection {STOP = 0, LEFT, RIGHT, UP, DOWN};
 eDirection dir;
 
 void Setup(){
+    srand((unsigned) time(NULL));
     gameOver = false;
     dir = STOP;
-    x = width / 2;
-    y = height /2;
+    x = width/2;
+    y = height/2;
     fruitX = rand() % width; 
     fruitY = rand() % height;
     score = 0;
@@ -20,7 +23,7 @@ void Setup(){
 void Draw()
 {
     system("cls");
-    for (int i =0; i< width; i++)
+    for (int i =0; i< width+2; i++)
         cout << "#";
     cout << endl;
     
@@ -39,10 +42,11 @@ void Draw()
         }
         cout << endl;
     }
-    for (int i=0; i< width+1; i++){
+    for (int i=0; i< width+2; i++){
         cout << "#";
     }
     cout << endl;
+    cout << "Score: " << score;
 }
 void Input()
 {
@@ -89,6 +93,15 @@ void Logic()
     default:
         break;
     }
+    if (x > width+1 || x < 0 || y>height || y<0)
+        gameOver = true;
+
+    if (x == fruitX && y == fruitY)
+        {
+            score += 10;
+            fruitX = rand() % width; 
+            fruitY = rand() % height;
+        }
 }
 int main()
 {
@@ -99,7 +112,6 @@ int main()
         Input();
         Logic();
     }
-    Draw();
 
     return 0;
 }
