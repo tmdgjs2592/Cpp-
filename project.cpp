@@ -1,12 +1,15 @@
 #include <iostream>
 #include <conio.h>
 #include <random>
+#include <windows.h>
 #include "time.h"
 using namespace std;
 bool gameOver;
 const int width = 20;
 const int height = 20;
 int x, y, fruitX, fruitY, score;
+int tailxX[100], tailY[100];
+int nTail;
 enum eDirection {STOP = 0, LEFT, RIGHT, UP, DOWN};
 eDirection dir;
 
@@ -35,8 +38,18 @@ void Draw()
                 cout << "O";
             else if (i==fruitY && j ==fruitX)
                 cout <<"F";
-            else 
-                cout << " ";
+            else {
+                bool print = false;
+                for(int k =0; k<nTail; k++){
+                    if (tailxX[k] == j && tailY[k]==i)
+                    {
+                        cout <<"o";
+                        print = true;
+                    }
+                }
+                if (!print)
+                    cout << " ";
+            }
             if (j == width-1)
                 cout << "#";
         }
@@ -76,6 +89,20 @@ void Input()
 }
 void Logic()
 {
+    int prevX = tailxX[0];
+    int prevY = tailY[0];
+    int prev2X, prev2Y;
+    tailxX[0] = x;
+    tailY[0] = y;
+    for (int i=1; i < nTail; i++)
+    {
+        prev2X = tailxX[i];
+        prev2Y = tailY[i];
+        tailxX[i] = prevX;
+        tailY[i] = prevY;
+        prevX = prev2X;
+        prevY = prev2Y;
+    }
     switch(dir)
     {
     case LEFT:
@@ -101,6 +128,7 @@ void Logic()
             score += 10;
             fruitX = rand() % width; 
             fruitY = rand() % height;
+            nTail++;
         }
 }
 int main()
@@ -111,6 +139,7 @@ int main()
         Draw();
         Input();
         Logic();
+        Sleep(50);
     }
 
     return 0;
