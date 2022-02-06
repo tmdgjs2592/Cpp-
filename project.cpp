@@ -5,8 +5,8 @@
 #include "time.h"
 using namespace std;
 bool gameOver;
-const int width = 20;
-const int height = 20;
+const int width = 40;
+const int height = 40;
 int x, y, fruitX, fruitY, score;
 int tailxX[100], tailY[100];
 int nTail;
@@ -139,7 +139,7 @@ int main()
         Draw();
         Input();
         Logic();
-        Sleep(50);
+        Sleep(100);
     }
 
     return 0;
