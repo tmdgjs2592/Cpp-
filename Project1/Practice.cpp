@@ -13,7 +13,7 @@
 #include <math.h>
 using namespace std;
 
-int xIncrement, yIncrement;
+float xIncrement, yIncrement;
 bool* keyStates = new bool[256];
 
 void keyPressed(unsigned char key, int x, int y){
@@ -37,20 +37,30 @@ void drawMap()
 	glVertex2f(0.8f, 0.8f);
 	glVertex2f(-0.8f, 0.8f); // up
 	glEnd();
-
 	glFlush();
+
 }
 
-void keyoperations()
+void keyoperations(unsigned char key, int x, int y)
 {
-	if(keyStates['a'])
-		xIncrement = -0.05;
-	if(keyStates['d'])
-			xIncrement = 0.05;
-	if(keyStates['w'])
-			yIncrement = -0.05;
-	if(keyStates['d'])
-			yIncrement = 0.05;
+	switch(key)
+	{
+	case'a':
+		xIncrement -= 0.02;
+		break;
+	case'd':
+		xIncrement += 0.02;
+		break;
+	case'w':
+		yIncrement += 0.02;
+		break;
+	case's':
+		yIncrement -=0.02;
+		break;
+	default:
+		break;
+	}
+	glutPostRedisplay();
 }
 
 void drawSnake(float cx, float cy, float r, int num_segments)
@@ -65,30 +75,31 @@ void drawSnake(float cx, float cy, float r, int num_segments)
 	        float y = r * sinf(theta); //calculate the y component
 
 	        glVertex2f(x + cx, y + cy); //output vertex
-
-	    }c
+	    }
 	    glEnd();
-	    glFlush();
+
 }
 
-
 void display(){
-	keyoperations();
+	glutKeyboardFunc(keyoperations);
+	glClear(GL_COLOR_BUFFER_BIT);
 	drawMap();
 	drawSnake(0.3 + xIncrement, 0.3 + yIncrement, 0.05, 100);
-
+	glFlush();
 }
 
 int main(int argc, char** argv) {
+
    glutInit(&argc, argv);// Initialize GLUT
    //glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    // Create a window with the given title
    glutInitWindowSize(750, 750);   // Set the window's initial width & height
-   glutInitWindowPosition(500, 50);
-   glutCreateWindow("OpenGL Snake"); // Position the window's initial top-left corner
+   glutInitWindowPosition(500, 50);  // Position the window's initial top-left corner
+   glutCreateWindow("Snake Game by John Lee"); // Create a window with the given title
+
    glutDisplayFunc(display); // Register display callback handler for window re-paint
-   glutKeyboardFunc(keyPressed);
-   glutKeyboardUpFunc(keyUp);
+
+   glutSwapBuffers();
+
    glutMainLoop();           // Enter the event-processing loop
    return 0;
 }
