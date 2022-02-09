@@ -13,7 +13,7 @@
 #include <math.h>
 using namespace std;
 
-
+float x,y,foodX,foodY;
 float xIncrement, yIncrement;
 bool* keyStates = new bool[256];
 bool start = false;
@@ -58,6 +58,51 @@ void firstScreen()
 
 }
 
+void drawMap()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+	glBegin(GL_QUADS);
+	glColor3f(0.84, 0.84, 0.84); // Grey
+	glRectf(50,50,50,50);
+	glVertex2f(-0.8f, -0.8f);    // x, y, down
+	glVertex2f(0.8f, -0.8f); //
+	glVertex2f(0.8f, 0.8f);
+	glVertex2f(-0.8f, 0.8f); // up
+	glEnd();
+
+}
+
+void drawSnake(float cx, float cy, float r, int num_segments)
+{
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	    for(int ii = 0; ii < num_segments; ii++)
+	    {
+	        float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments); //get the current angle, whole circle divided by the number of angles
+
+	        x = r * cosf(theta); //calculate the x component
+	        y = r * sinf(theta); //calculate the y component
+
+	        glVertex2f(x + cx, y + cy); //output vertex
+	    }
+	glEnd();
+
+}
+
+void drawFood()
+{
+	foodX = (rand() % 800) / 1000.0;
+	foodX = (rand() % 800) / 1000.0;
+
+	glPointSize(5.0);
+	glBegin(GL_POINTS);
+	glColor3f(0, 0, 0);
+	glVertex2f(foodX, foodY);
+	glEnd();
+}
 
 void keyoperations(unsigned char key, int x, int y)
 {
@@ -85,39 +130,8 @@ void keyoperations(unsigned char key, int x, int y)
 	glutPostRedisplay();
 }
 
-void drawMap()
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-	glBegin(GL_QUADS);
-	glColor3f(0.84, 0.84, 0.84); // Grey
-	glRectf(50,50,50,50);
-	glVertex2f(-0.8f, -0.8f);    // x, y, down
-	glVertex2f(0.8f, -0.8f); //
-	glVertex2f(0.8f, 0.8f);
-	glVertex2f(-0.8f, 0.8f); // up
-	glEnd();
 
-}
-
-void drawSnake(float cx, float cy, float r, int num_segments)
-{
-	glBegin(GL_LINE_LOOP);
-	glColor3f(0.0f, 0.0f, 0.0f);
-	    for(int ii = 0; ii < num_segments; ii++)
-	    {
-	        float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments); //get the current angle, whole circle divided by the number of angles
-
-	        float x = r * cosf(theta); //calculate the x component
-	        float y = r * sinf(theta); //calculate the y component
-
-	        glVertex2f(x + cx, y + cy); //output vertex
-	    }
-	glEnd();
-
-}
 
 void reshape(int w, int h){
 	glMatrixMode(GL_PROJECTION);
@@ -134,10 +148,10 @@ void display(){
 	if (start){
 		drawMap();
 		drawSnake(0.03 + xIncrement, 0.05 + yIncrement, 0.05, 100);
+		drawFood();
 	}
 	else
 	{
-
 		firstScreen();
 	}
 
