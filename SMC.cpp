@@ -23,8 +23,17 @@ void chapter2()
     cout << "Minimum numebr entered :" << min << endl;
 }
 
+void test()
+{
+    int n=1;
+    do
+    {
+        cout << n;
+    } while (++n <=3);
+    
+}
 int main()
 {
-    chapter2();
+    test();
     return 0;
 }
