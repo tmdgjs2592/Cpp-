@@ -1,6 +1,8 @@
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
+#include <string>
+#include <stdlib.h>
 using namespace std;
 
 void chapter2()
@@ -252,6 +254,50 @@ void chapter3_programming3() // Roman numerals
     cout << convert;
 
 }
+
+void chapter3_programming4()
+{
+    char *numinput, *charinput;
+    int count1, count2;
+    int result=0;
+    cout << "Input how many number cards you have: ";
+    cin >> count1;
+    cout << "Input how many 10 points cards you have: ";
+    cin >> count2;
+    numinput = new char[count1];
+    charinput = new char[count2];
+    for (int i=0; i<count1; i ++){
+        cout << "Input the value of number cards (one by one): ";
+        cin >> numinput[i];
+    }
+    for (int i=0; i<count2; i++){
+        cout << "Input the value of 10 points cards (one by one): ";
+        cin >> charinput[i];
+    }
+    for(int i =0; i<count1; i++){
+        result += numinput[i] - 48;
+        
+    }
+    for(int i =0; i<count2; i++){
+        if (charinput[i] == 't' || charinput[i] == 'J' || charinput[i] == 'j' || 
+            charinput[i] == 'Q' || charinput[i] == 'q' || charinput[i] == 'K' || charinput[i] == 'k'){
+            result += 10;
+        }
+        else{
+            if(21-(result+11)>=0)
+                result += 11;
+            else
+                result +=1;
+        }
+    }
+    if (result<=21)
+        cout << result;
+    else   
+        cout << "busted";
+    cout << result;
+    
+    
+}
 void test()
 {
     string me;
@@ -263,6 +309,6 @@ void test()
 }
 int main()
 {
-    chapter3_programming3();
+    chapter3_programming4();
     return 0;
 }
